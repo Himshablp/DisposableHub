@@ -1,0 +1,53 @@
+server:
+  port: 9091
+
+spring:
+  application:
+    name: AuctionService
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/bfsi_staging?characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 55555555
+    driver-class-name: com.mysql.cj.jdbc.Driver  # ✅ Explicitly define driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect  # ✅ Set MySQL dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true  # ✅ Formats SQL output for readability
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}  # ✅ Unique instance ID
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:9090/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always  # ✅ Shows full health details
+  health:
+    defaults:
+      enabled: true
+    db:
+      enabled: true  # ✅ Enables DB health check
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG

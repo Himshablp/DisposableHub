@@ -1,0 +1,50 @@
+server:
+  port: 9092
+
+spring:
+  application:
+    name: API-Gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+          lower-case-service-id: true  #  Ensures service names are lowercase
+#      routes:
+#        - id: AuctionService
+#          uri: lb://AuctionService
+#          predicates:
+#            - Path=/auction/**
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:9090/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    env:
+      enabled: true
+  endpoint:
+    gateway:
+      enabled: true
+info:
+  app:
+    name: api-gateway
+    description: "This is a central Service"
+    version: "1.0"
+
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: DEBUG
+#    reactor.netty.http.client: DEBUG
